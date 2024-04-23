@@ -1,0 +1,8 @@
+---
+- hosts: DC
+  vars_files:
+    - vars.yml
+    - passwd.yml
+  roles:
+    - role: create_groups_and_users
+      tags: users_and_groups

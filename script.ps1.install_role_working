@@ -1,0 +1,27 @@
+Install-WindowsFeature DHCP -IncludeManagementTools
+netsh dhcp add securitygroups
+Restart-Service dhcpserver
+
+
+Add-DhcpServerInDC -DnsName DC1.ad.local -IPAddress 192.168.101.177
+#Get-DhcpServerInDC
+
+#Set-ItemProperty –Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\12 –Name ConfigurationState –Value 2
+
+#Set-DhcpServerv4DnsSetting -ComputerName "DC1.ad.local" -DynamicUpdates "Always" -DeleteDnsRRonLeaseExpiry $True
+
+#$Credential = Get-Credential
+#Set-DhcpServerDnsCredential -Credential $Credential -ComputerName "DHCP1.ad.local"
+
+#rem At prompt, supply credential in form DOMAIN\user, password
+
+#rem Configure scope Corpnet
+#Add-DhcpServerv4Scope -name "Corpnet" -StartRange 192.168.101.1 -EndRange 192.168.101.254 -SubnetMask 255.255.255.0 -State Active
+#Add-DhcpServerv4ExclusionRange -ScopeID 192.168.101.0 -StartRange 192.168.101.1 -EndRange 192.168.101.15
+#Set-DhcpServerv4OptionValue -OptionID 3 -Value 192.168.101.1 -ScopeID 192.168.101.0 -ComputerName DC1.ad.local
+#Set-DhcpServerv4OptionValue -DnsDomain ad.local -DnsServer 192.168.101.177
+
+#rem Configure scope Corpnet2
+#Add-DhcpServerv4Scope -name "Corpnet2" -StartRange 192.168.2.1 -EndRange 192.168.2.254 -SubnetMask 255.255.255.0 -State Active
+#Add-DhcpServerv4ExclusionRange -ScopeID 192.168.2.0 -StartRange 192.168.2.1 -EndRange 192.168.2.15
+#Set-DhcpServerv4OptionValue -OptionID 3 -Value 192.168.2.1 -ScopeID 192.168.2.0 -ComputerName DC1.ad.local

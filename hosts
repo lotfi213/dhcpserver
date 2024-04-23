@@ -1,0 +1,9 @@
+[DC]
+192.168.101.177
+
+[DC:vars]
+ansible_user=administrator
+ansible_password=Th@les01
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_python_interpreter=/usr/bin/python3

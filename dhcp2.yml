@@ -1,0 +1,31 @@
+---
+- hosts: DC
+  tasks:
+    - name: Install DHCP Server feature
+      ansible.windows.win_feature:
+        name: DHCP
+        state: present
+
+    - name: Configure DHCP Scope
+      community.windows.win_dhcp_server:
+        scope_name: "LAN"
+        state: present
+        subnet_mask: "255.255.255.0"
+        start_range: "192.168.1.100"
+        end_range: "192.168.1.200"
+        gateway: "192.168.1.1"
+        dns_servers: "192.168.1.10"
+
+    - name: Authorize DHCP Server in Active Directory
+      ansible.windows.win_shell: netsh dhcp add server {{ ansible_host }} {{ ansible_hostname }} authorize
+      register: authorize_result
+      ignore_errors: yes
+
+    - name: Check DHCP server authorization status
+      ansible.windows.win_shell: netsh dhcp show server
+      register: authorization_status
+
+    - name: Display authorization status
+      debug:
+        var: authorization_status.stdout_lines
+

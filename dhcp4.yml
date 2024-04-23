@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+    - name: Install DHCP Server with management tools
+      ansible.windows.win_feature:
+        name: DHCP
+        state: present
+        include_management_tools: true
+      register: win_feature
+
+    - name: Reboot if installing Web-Server feature requires it
+      ansible.windows.win_reboot:
+      when: win_feature.reboot_required
+
+    - name: Authorise DHCP Server in Active Directory and Create Scopes
+      script: script.ps1 
+
+    - name: Update DHCP Installation Status
+      ansible.windows.win_regedit:
+        path: HKLM:\Software\Microsoft\ServerManager\Roles
+        name: 12
+        data: 2

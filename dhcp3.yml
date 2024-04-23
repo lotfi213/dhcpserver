@@ -1,0 +1,16 @@
+---
+- hosts: DC
+  tasks:
+    - name: Install DHCP Server feature
+      ansible.windows.win_feature:
+        name: DHCP
+        state: present
+    - name: Configure DHCP Scope
+      community.windows.win_dhcp_server:
+        scope_name: "LAN"
+        state: present
+        subnet_mask: "255.255.255.0"
+        start_range: "192.168.1.100"
+        end_range: "192.168.1.200"
+        gateway: "192.168.1.1"
+        dns_servers: "192.168.1.10"
